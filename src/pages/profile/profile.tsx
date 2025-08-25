@@ -1,26 +1,24 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from '../../services/store';
+import { TRegisterData } from '@api';
+import { newData, updateUser } from '../../slice/userSlice';
 
 export const Profile: FC = () => {
-  /** TODO: взять переменную из стора */
-  const user = {
-    name: '',
-    email: ''
-  };
-
+  const { user } = useSelector((store) => store.user);
+  const dispath = useDispatch();
   const [formValue, setFormValue] = useState({
     name: user.name,
     email: user.email,
     password: ''
   });
-
   useEffect(() => {
     setFormValue((prevState) => ({
       ...prevState,
       name: user?.name || '',
       email: user?.email || ''
     }));
-  }, [user]);
+  }, []);
 
   const isFormChanged =
     formValue.name !== user?.name ||
@@ -29,6 +27,21 @@ export const Profile: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    const newValue: Partial<TRegisterData> = {};
+    if (user.name !== formValue.name) {
+      newValue.name = formValue.name;
+    }
+    if (user.email !== formValue.email) {
+      newValue.email = formValue.email;
+    }
+    if (formValue.password !== '') {
+      newValue.password = formValue.password;
+    }
+    dispath(updateUser(newValue));
+    dispath(newData(newValue));
+    if (formValue.password !== '') {
+      setFormValue((prevState) => ({ ...prevState, password: '' }));
+    }
   };
 
   const handleCancel = (e: SyntheticEvent) => {
