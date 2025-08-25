@@ -1,13 +1,15 @@
+import { updateUser } from './userSlice';
 import {
   getFeedsApi,
   getOrderByNumberApi,
   getOrdersApi,
   orderBurgerApi,
-  TFeedsResponse
+  TFeedsResponse,
+  TNewOrderResponse
 } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TBurgerConsturctorState } from './burgerConsstructorSlice';
-import { TOrder } from '@utils-types';
+import { TIngredient, TOrder } from '@utils-types';
 
 type TOrderState = {
   feed: {
@@ -21,6 +23,8 @@ type TOrderState = {
     _orders: Array<TOrder>;
   };
   myOrder: Array<TOrder>;
+  order: TNewOrderResponse | null;
+  orderRequest: boolean;
 };
 
 const initialState: TOrderState = {
@@ -29,7 +33,9 @@ const initialState: TOrderState = {
     _success: false,
     _orders: []
   },
-  myOrder: []
+  myOrder: [],
+  order: null,
+  orderRequest: false
 };
 
 export const orderBurger = createAsyncThunk(
@@ -43,25 +49,31 @@ export const orderBurger = createAsyncThunk(
   }
 );
 
-export const getFeeds = createAsyncThunk('feeds/get', async () =>
-  getFeedsApi()
-);
+export const getFeeds = createAsyncThunk('feeds/get', getFeedsApi);
 
-export const getOrderList = createAsyncThunk('orders/getAll', async () =>
-  getOrdersApi()
-);
+export const getOrderList = createAsyncThunk('orders/getAll', getOrdersApi);
 
 export const getOrderByNumber = createAsyncThunk(
   'orders/byNumber',
-  async (number: number) => getOrderByNumberApi(number)
+  getOrderByNumberApi
 );
 
 const orderSlice = createSlice({
   name: 'orderList',
   initialState,
-  reducers: {},
+  reducers: {
+    closeOrder: (state) => {
+      state.order = null;
+    }
+  },
   extraReducers(Builder) {
-    Builder.addCase(orderBurger.fulfilled, () => {})
+    Builder.addCase(orderBurger.fulfilled, (state, action) => {
+      state.order = action.payload;
+      state.orderRequest = false;
+    })
+      .addCase(orderBurger.pending, (state) => {
+        state.orderRequest = true;
+      })
       .addCase(getOrderList.fulfilled, (state, action) => {
         state.myOrder = action.payload;
       })
@@ -79,3 +91,4 @@ const orderSlice = createSlice({
 });
 
 export default orderSlice;
+export const { closeOrder } = orderSlice.actions;

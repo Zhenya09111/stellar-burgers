@@ -20,8 +20,9 @@ const initialState: TIngredientsSlice = {
   isIngredientsLoading: false
 };
 
-export const getIngredients = createAsyncThunk('ingredients/getAll', async () =>
-  getIngredientsApi()
+export const getIngredients = createAsyncThunk(
+  'ingredients/getAll',
+  getIngredientsApi
 );
 
 const ingredientSlice = createSlice({

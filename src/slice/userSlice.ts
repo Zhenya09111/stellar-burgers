@@ -9,7 +9,7 @@ import {
   TRegisterData
 } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { deleteCookie, getCookie, setCookie } from '../utils/cookie';
+import { deleteCookie, setCookie } from '../utils/cookie';
 const URL = process.env.BURGER_API_URL;
 
 type TUserState = {
@@ -27,7 +27,7 @@ const initialState: TUserState = {
 
 export const registerUser = createAsyncThunk(
   'user/registration',
-  async (data: TRegisterData) => registerUserApi(data)
+  registerUserApi
 );
 
 export const loginUser = createAsyncThunk(
@@ -47,16 +47,9 @@ export const logout = createAsyncThunk('user/logout', async () => {
   });
 });
 
-export const getUser = createAsyncThunk('user/getAuth', async () =>
-  getUserApi()
-);
+export const getUser = createAsyncThunk('user/getAuth', getUserApi);
 
-export const updateUser = createAsyncThunk(
-  'user/update',
-  async (data: Partial<TRegisterData>) => {
-    updateUserApi(data);
-  }
-);
+export const updateUser = createAsyncThunk('user/update', updateUserApi);
 
 const userSlice = createSlice({
   name: 'user',

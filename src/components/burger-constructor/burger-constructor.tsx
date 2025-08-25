@@ -2,15 +2,16 @@ import { FC, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from '../../services/store';
-import { orderBurger } from '../../slice/orderSlice';
+import { closeOrder, orderBurger } from '../../slice/orderSlice';
+import { clearIngredients } from '../../slice/burgerConsstructorSlice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const { burgerConstuctor } = useSelector((store) => store.burger);
+  const { order, orderRequest } = useSelector((store) => store.orderList);
   const constructorItems = burgerConstuctor;
-  const orderRequest = false;
 
-  const orderModalData = null;
+  const orderModalData = order ? order.order : null;
 
   const burgerItem = {
     burgerConstuctor: {
@@ -22,7 +23,10 @@ export const BurgerConstructor: FC = () => {
   const onOrderClick = () => {
     dispatch(orderBurger(burgerItem));
   };
-  const closeOrderModal = () => {};
+  const closeOrderModal = () => {
+    dispatch(closeOrder());
+    dispatch(clearIngredients());
+  };
 
   const price = useMemo(
     () =>

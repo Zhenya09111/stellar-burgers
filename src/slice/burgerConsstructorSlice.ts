@@ -33,9 +33,27 @@ const burgerConstructorSlice = createSlice({
         const id = nanoid();
         return { payload: { ...item, id } };
       }
+    },
+    changeIngredients: (state, action) => {
+      state.burgerConstuctor.ingredients = action.payload;
+    },
+    removeItem: (state, action) => {
+      state.burgerConstuctor.ingredients =
+        state.burgerConstuctor.ingredients.filter(
+          (item) => item.id !== action.payload
+        );
+    },
+    clearIngredients: (state) => {
+      state.burgerConstuctor.bun = undefined;
+      state.burgerConstuctor.ingredients = [];
     }
   }
 });
 
 export default burgerConstructorSlice;
-export const { addIngredient } = burgerConstructorSlice.actions;
+export const {
+  addIngredient,
+  changeIngredients,
+  removeItem,
+  clearIngredients
+} = burgerConstructorSlice.actions;
