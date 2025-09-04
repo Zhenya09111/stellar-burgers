@@ -1,4 +1,4 @@
-import { useSelector } from '../../services/store';
+import { useDispatch, useSelector } from '../../services/store';
 
 import styles from './constructor-page.module.css';
 
@@ -7,9 +7,8 @@ import { BurgerConstructor } from '../../components';
 import { Preloader } from '../../components/ui';
 import { FC } from 'react';
 
-export const ConstructorPage: FC = () => {
-  /** TODO: взять переменную из стора */
-  const isIngredientsLoading = false;
+const ConstructorPage: FC = () => {
+  const { isIngredientsLoading } = useSelector((store) => store.ingredients);
 
   return (
     <>
@@ -31,3 +30,4 @@ export const ConstructorPage: FC = () => {
     </>
   );
 };
+export default ConstructorPage;
