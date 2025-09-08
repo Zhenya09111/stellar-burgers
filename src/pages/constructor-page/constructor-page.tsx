@@ -9,7 +9,6 @@ import { FC } from 'react';
 
 const ConstructorPage: FC = () => {
   const { isIngredientsLoading } = useSelector((store) => store.ingredients);
-
   return (
     <>
       {isIngredientsLoading ? (

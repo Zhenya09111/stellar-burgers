@@ -20,10 +20,10 @@ import {
 } from 'react-router-dom';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
-import { useDispatch } from '../../services/store';
+import { useDispatch, useSelector } from '../../services/store';
 import { useEffect } from 'react';
 import { getIngredients } from '../../slice/ingredientsSlice';
-import { getUser } from '../../slice/userSlice';
+import { checkUserAuth } from '../../slice/userSlice';
 import { ProtectedRoute } from '../../protectedRoute/protectedRoute';
 
 const App = () => {
@@ -32,14 +32,14 @@ const App = () => {
       location.state?.background ? navigate(-1) : navigate('/');
     }
   };
-  const { number } = useParams();
+  const ing = useSelector((store) => store.ingredients);
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const background = location.state?.background;
   useEffect(() => {
     dispatch(getIngredients());
-    dispatch(getUser());
+    dispatch(checkUserAuth());
   }, []);
   return (
     <div className={styles.app}>
