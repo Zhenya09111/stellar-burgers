@@ -2,7 +2,7 @@ import { FC, SyntheticEvent, useState } from 'react';
 import { RegisterUI } from '@ui-pages';
 import { registerUserApi } from '@api';
 import { useDispatch, useSelector } from '../../services/store';
-import { registerUser } from '../../slice/userSlice';
+// import { registerUser } from '../../slice/userSlice';
 import { Navigate } from 'react-router-dom';
 
 const Register: FC = () => {
@@ -13,13 +13,11 @@ const Register: FC = () => {
   // const { isRegister } = useSelector((store) => store.user);
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispath(
-      registerUser({
-        email: email,
-        name: userName,
-        password: password
-      })
-    );
+    registerUserApi({
+      email: email,
+      name: userName,
+      password: password
+    });
   };
 
   // if (isRegister) {

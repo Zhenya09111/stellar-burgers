@@ -118,7 +118,7 @@ const App = () => {
         <Route
           path='/ingredients/:id'
           element={
-            <Modal title='dfsd' onClose={closureHandler}>
+            <Modal title='Детали ингредиента' onClose={closureHandler}>
               <IngredientDetails />
             </Modal>
           }
@@ -153,7 +153,7 @@ const App = () => {
           <Route
             path='/ingredients/:id'
             element={
-              <Modal title='dfsd' onClose={closureHandler}>
+              <Modal title='Детали ингредиента' onClose={closureHandler}>
                 <IngredientDetails />
               </Modal>
             }

@@ -5,6 +5,7 @@ import {
   logoutApi,
   registerUserApi,
   TLoginData,
+  TRegisterData,
   updateUserApi
 } from './../utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
@@ -23,10 +24,10 @@ const initialState: TUserState = {
   isAuth: false
 };
 
-export const registerUser = createAsyncThunk(
-  'user/registration',
-  registerUserApi
-);
+// export const registerUser = createAsyncThunk(
+//   'user/registration',
+//   registerUserApi
+// );
 
 export const loginUser = createAsyncThunk(
   'user/login',
@@ -36,12 +37,17 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-export const logout = createAsyncThunk('user/logout', async () => {
-  logoutApi().then(() => {
-    localStorage.clear();
-    deleteCookie('accessToken');
-  });
-});
+export const logout = createAsyncThunk(
+  'user/logout',
+  async (_, { dispatch }) => {
+    logoutApi().then(() => {
+      localStorage.clear();
+      deleteCookie('accessToken');
+      dispatch(setUser({ user: { email: '', name: '' } }));
+      dispatch(setIsAuthChecked(false));
+    });
+  }
+);
 
 export const checkUserAuth = createAsyncThunk(
   'user/checkUserAuth',
@@ -57,7 +63,14 @@ export const checkUserAuth = createAsyncThunk(
   }
 );
 
-export const updateUser = createAsyncThunk('user/update', updateUserApi);
+export const updateUser = createAsyncThunk(
+  'user/update',
+  async (userData: Partial<TRegisterData>, { dispatch }) => {
+    updateUserApi(userData).then((data) => {
+      dispatch(setUser({ ...data }));
+    });
+  }
+);
 
 const userSlice = createSlice({
   name: 'user',
@@ -75,18 +88,18 @@ const userSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(registerUser.fulfilled, () => {})
+      // .addCase(registerUser.fulfilled, () => {})
       .addCase(loginUser.fulfilled, (state, action) => {
         state.user.email = action.payload.user.email;
         state.user.name = action.payload.user.name;
         state.isAuth = true;
-      })
-      .addCase(logout.fulfilled, (state, action) => {
-        state.isAuth = false;
-        state.user.name = '';
-        state.user.email = '';
-      })
-      .addCase(updateUser.fulfilled, () => {});
+      });
+    // .addCase(logout.fulfilled, (state, action) => {
+    //   state.isAuth = false;
+    //   state.user.name = '';
+    //   state.user.email = '';
+    // })
+    // .addCase(updateUser.fulfilled, () => {});
   }
 });
 
