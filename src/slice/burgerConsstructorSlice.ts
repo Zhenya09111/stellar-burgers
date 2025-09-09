@@ -46,13 +46,13 @@ const burgerConstructorSlice = createSlice({
     ingredientUp: (state, action) => {
       const newIngredients = [...state.burgerConstuctor.ingredients];
       const currentItem = newIngredients.splice(action.payload, 1)[0];
-      newIngredients.splice(action.payload + 1, 0, currentItem);
+      newIngredients.splice(action.payload - 1, 0, currentItem);
       state.burgerConstuctor.ingredients = [...newIngredients];
     },
     ingredientDown: (state, action) => {
       const newIngredients = [...state.burgerConstuctor.ingredients];
       const currentItem = newIngredients.splice(action.payload, 1)[0];
-      newIngredients.splice(action.payload - 1, 0, currentItem);
+      newIngredients.splice(action.payload + 1, 0, currentItem);
       state.burgerConstuctor.ingredients = [...newIngredients];
     }
   }

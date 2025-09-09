@@ -1,27 +1,29 @@
 import { expect, test, describe, jest } from '@jest/globals';
 import { configureStore } from '@reduxjs/toolkit';
-import userSlice, { loginUser, setIsAuthChecked, setUser } from '../src/slice/userSlice';
-const store = configureStore({
-  reducer: {
-    user: userSlice.reducer
-  }
-});
-jest.mock('../src/utils/burger-api', () => ({
-  loginUserApi: jest.fn(() => Promise.resolve(testUser))
-}));
+import userSlice, {
+  loginUser,
+  setIsAuthChecked,
+  setUser
+} from '../src/slice/userSlice';
 const testUser = {
-  success: true,
-  refreshToken: 'ttt',
-  accessToken: 'ttt',
   user: {
     email: 'ggg',
     name: 'ddd'
-  }
+  },
+  isAuth: true
 };
+const initialState = {
+  user: {
+    email: '',
+    name: ''
+  },
+  isAuth: false
+};
+
 test('user', async () => {
-  await store.dispatch(loginUser({ email: 'Evgeniy', password: 'ee@mail.ru' }));
-  const { user } = store.getState().user;
-  expect(user).toEqual(testUser.user);
+  const action = { type: loginUser.fulfilled.type, payload: testUser };
+  const newState = userSlice.reducer(initialState, action);
+  expect(newState.user).toEqual(testUser.user);
 });
 describe('тест редюсера', () => {
   const initialStateUser = {

@@ -1,14 +1,5 @@
 import { expect, test, describe, jest } from '@jest/globals';
-import { configureStore } from '@reduxjs/toolkit';
 import ingredientSlice, { getIngredients } from '../src/slice/ingredientsSlice';
-const store = configureStore({
-  reducer: {
-    ingredients: ingredientSlice.reducer
-  }
-});
-jest.mock('../src/utils/burger-api', () => ({
-  getIngredientsApi: jest.fn(() => Promise.resolve(testData))
-}));
 const testData = [
   {
     _id: '643d69a5c3f7b9001cfa0941',
@@ -50,8 +41,42 @@ const testData = [
     image_large: 'https://code.s3.yandex.net/react/code/sauce-01-large.png'
   }
 ];
-test('получение ингредиентов', async () => {
-  await store.dispatch(getIngredients());
-  const { ingredients } = store.getState().ingredients;
-  expect(ingredients).toEqual(testData);
+describe('ingredientSlice', () => {
+  test('getIngredients pending', () => {
+    const initialState = {
+      ingredients: [],
+      success: false,
+      isIngredientsLoading: false,
+      buns: [],
+      sauces: [],
+      mains: []
+    };
+
+    const action = { type: getIngredients.pending.type };
+    const newState = ingredientSlice.reducer(initialState, action);
+
+    expect(newState.isIngredientsLoading).toBe(true);
+    expect(newState.success).toBe(false);
+  });
+
+  test('getIngredients fulfilled', () => {
+    const initialState = {
+      ingredients: [],
+      success: false,
+      isIngredientsLoading: false,
+      buns: [],
+      sauces: [],
+      mains: []
+    };
+
+    const action = { type: getIngredients.fulfilled.type, payload: testData };
+    const newState = ingredientSlice.reducer(initialState, action);
+
+    expect(newState.success).toBe(true);
+    expect(newState.isIngredientsLoading).toBe(false);
+    expect(newState.ingredients).toEqual(testData);
+    expect(newState.buns).toEqual([testData[1]]);
+    expect(newState.sauces).toEqual([testData[2]]);
+    expect(newState.mains).toEqual([testData[0]]);
+  });
 });
