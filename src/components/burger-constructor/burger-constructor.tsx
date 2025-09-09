@@ -9,8 +9,9 @@ export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const { burgerConstuctor } = useSelector((store) => store.burger);
   const { order, orderRequest } = useSelector((store) => store.orderList);
+  const { isAuth } = useSelector((store) => store.user);
   const constructorItems = burgerConstuctor;
-
+  const confirmation = isAuth && burgerConstuctor.ingredients.length > 0;
   const orderModalData = order ? order.order : null;
 
   const burgerItem = {
@@ -40,6 +41,7 @@ export const BurgerConstructor: FC = () => {
 
   return (
     <BurgerConstructorUI
+      confirmation={confirmation}
       price={price}
       orderRequest={orderRequest}
       constructorItems={constructorItems}

@@ -1,4 +1,3 @@
-import { BurgerConstructor } from '@components';
 import { createSlice, nanoid } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient } from '@utils-types';
 import type { PayloadAction } from '@reduxjs/toolkit';
@@ -34,9 +33,6 @@ const burgerConstructorSlice = createSlice({
         return { payload: { ...item, id } };
       }
     },
-    changeIngredients: (state, action) => {
-      state.burgerConstuctor.ingredients = action.payload;
-    },
     removeItem: (state, action) => {
       state.burgerConstuctor.ingredients =
         state.burgerConstuctor.ingredients.filter(
@@ -46,6 +42,18 @@ const burgerConstructorSlice = createSlice({
     clearIngredients: (state) => {
       state.burgerConstuctor.bun = undefined;
       state.burgerConstuctor.ingredients = [];
+    },
+    ingredientUp: (state, action) => {
+      const newIngredients = [...state.burgerConstuctor.ingredients];
+      const currentItem = newIngredients.splice(action.payload, 1)[0];
+      newIngredients.splice(action.payload - 1, 0, currentItem);
+      state.burgerConstuctor.ingredients = [...newIngredients];
+    },
+    ingredientDown: (state, action) => {
+      const newIngredients = [...state.burgerConstuctor.ingredients];
+      const currentItem = newIngredients.splice(action.payload, 1)[0];
+      newIngredients.splice(action.payload + 1, 0, currentItem);
+      state.burgerConstuctor.ingredients = [...newIngredients];
     }
   }
 });
@@ -53,7 +61,8 @@ const burgerConstructorSlice = createSlice({
 export default burgerConstructorSlice;
 export const {
   addIngredient,
-  changeIngredients,
   removeItem,
-  clearIngredients
+  clearIngredients,
+  ingredientUp,
+  ingredientDown
 } = burgerConstructorSlice.actions;

@@ -25,7 +25,6 @@ export const BurgerIngredients: FC = () => {
   const { buns, mains, sauces, success } = useSelector(
     (store) => store.ingredients
   );
-
   useEffect(() => {
     if (inViewBuns) {
       setCurrentTab('bun');

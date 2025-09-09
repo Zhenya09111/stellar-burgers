@@ -3,26 +3,20 @@ import { BurgerConstructorElementUI } from '@ui';
 import { BurgerConstructorElementProps } from './type';
 import { useDispatch, useSelector } from '../../services/store';
 import {
-  changeIngredients,
+  ingredientDown,
+  ingredientUp,
   removeItem
 } from '../../slice/burgerConsstructorSlice';
 
 export const BurgerConstructorElement: FC<BurgerConstructorElementProps> = memo(
   ({ ingredient, index, totalItems }) => {
     const dispatch = useDispatch();
-    const { burgerConstuctor } = useSelector((store) => store.burger);
     const handleMoveDown = () => {
-      const newIngredients = [...burgerConstuctor.ingredients];
-      const currentItem = newIngredients.splice(index, 1)[0];
-      newIngredients.splice(index + 1, 0, currentItem);
-      dispatch(changeIngredients(newIngredients));
+      dispatch(ingredientDown(index));
     };
 
     const handleMoveUp = () => {
-      const newIngredients = [...burgerConstuctor.ingredients];
-      const currentItem = newIngredients.splice(index, 1)[0];
-      newIngredients.splice(index - 1, 0, currentItem);
-      dispatch(changeIngredients(newIngredients));
+      dispatch(ingredientUp(index));
     };
 
     const handleClose = () => {

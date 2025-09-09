@@ -1,12 +1,10 @@
-import { updateUser } from './userSlice';
 import {
   getFeedsApi,
   getOrderByNumberApi,
   getOrdersApi,
   orderBurgerApi,
-  TFeedsResponse,
   TNewOrderResponse
-} from '@api';
+} from './../utils/burger-api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TBurgerConsturctorState } from './burgerConsstructorSlice';
 import { TIngredient, TOrder } from '@utils-types';
